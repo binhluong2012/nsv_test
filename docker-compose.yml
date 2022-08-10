@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  php:
+    ports:
+      - 85:80
+    image: thecodingmachine/php:7.3-v3-apache
+    container_name: nsv
+    restart: unless-stopped
+    volumes:
+      - './:/var/www/html'
+    extra_hosts: # <-- this is required
+      - "host.docker.internal:host-gateway" # <-- this is required
+    environment:
+        TZ: Asia/Tokyo
+        PHP_EXTENSION_MYSQLI: 1
+        PHP_EXTENSION_INTL: 1
+        PHP_INI_MAX_EXECUTION_TIME: 300
+        PHP_INI_MAX_INPUT_TIME: 300
+        PHP_INI_MEMORY_LIMIT: 512M
+        PHP_INI_POST_MAX_SIZE: 20M
+        PHP_INI_UPLOAD_MAX_FILESIZE: 20M
+        #APACHE_DOCUMENT_ROOT: app/webroot
+#         APACHE_RUN_USER: www-data
+#         APACHE_RUN_GROUP: www-data
+#         CRON_USER_1: www-data
+#         CRON_SCHEDULE_1: '*/15 * * * *'
+#         CRON_COMMAND_1: '/var/www/html/app/Console/cake Queue.Queue runworker'
+#         STARTUP_COMMAND_1: 'mkdir -p /var/www/html/app/webroot/imports/ && mkdir -p /var/www/html/app/webroot/files/ && mkdir -p /var/www/html/app/webroot/imports/'
+#         STARTUP_COMMAND_2: 'chmod 777 -R /var/www/html/app/webroot/'
+#         STARTUP_COMMAND_3: 'chmod 777 -R /var/www/html/app/Vendor/mpdf/mpdf/mpdf/tmp/'
+#         STARTUP_COMMAND_4: 'chmod 777 -R /var/www/html/app/tmp/'
+#         # CRON_USER_2: www-data
+#         # CRON_SCHEDULE_2: '0 0 * * *'
+#         # CRON_COMMAND_2: 'app/Console/cake Vip updateDeal'
+#         VIRTUAL_HOST: y4-dev.genkimiru.jp,www.y4-dev.genkimiru.jp
+
+# networks:
+#   default:
+#     external:
+#       name: nginx-proxy
