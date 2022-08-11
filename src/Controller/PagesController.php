@@ -25,6 +25,7 @@ use Cake\View\Exception\MissingTemplateException;
 use Cake\ORM\TableRegistry;
 use Cake\Mailer\Email;
 use CakePdf\Pdf\CakePdf;
+use \Mailjet\Resources;
 
 /**
  * Static content controller
@@ -126,24 +127,57 @@ class PagesController extends AppController
         $to = $this->request->getData('email');
         $fileName = 'staffs.pdf';
         $file_path = APP . 'files' . DS . $fileName;
-        $email = new Email('smtp');
-        $email->setFrom(array('admin@gmail.com' => 'Admin at gMail'));
-        $email->setTo($to);
-        $email->setEmailFormat('html');
-        $email->setSubject('Report');
-        $email->setAttachments([
-            'staffs.pdf' => [
-                'file' => $file_path,
-                'mimetype' => 'application/pdf'
-            ]
-         ]);
         $response = ['status' => true];
-        try {
-            $email->send('Please check attachment file');
-        } catch (\Cake\Network\Exception\SocketException $exception) {
-            $response = ['status' => false];
-        }
+        // $email = new Email('mailjet');
+        // $email->setFrom(array('admin@gmail.com' => 'Admin at gMail'));
+        // $email->setTo($to);
+        // $email->setEmailFormat('html');
+        // $email->setSubject('Report');
+        // $email->setAttachments([
+        //     'staffs.pdf' => [
+        //         'file' => $file_path,
+        //         'mimetype' => 'application/pdf'
+        //     ]
+        //  ]);
 
+        // try {
+        //     $email->send('Please check attachment file');
+        // } catch (\Cake\Network\Exception\SocketException $exception) {
+        //     $response = ['status' => false];
+        // }
+
+        $mj = new \Mailjet\Client('861055fc8ff4ca217bffa54c4ca94ace', '2bf4785cec8624932de7b9eb9b2921e5', true, ['version' => 'v3.1']);
+
+        // Define your request body
+        $file = file_get_contents($file_path);
+        $body = [
+            'Messages' => [
+                [
+                    'From' => [
+                        'Email' => "lttbinh@grandm.vn",
+                        'Name' => "Donotreply"
+                    ],
+                    'To' => [
+                        [
+                            'Email' => $to,
+                            'Name' => "You"
+                        ]
+                    ],
+                    'Subject' => "Report file",
+                    'TextPart' => "Please check attachment file",
+                    'HTMLPart' => "<p>Please check attachment file</p>",
+                    'Attachments' => [
+                        [
+                            'ContentType' => "application/pdf",
+                            'Filename' => $fileName,
+                            'Base64Content' => base64_encode($file)
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $res = $mj->post(Resources::$Email, ['body' => $body]);
+        $response['status'] = $res->success();
         $content = json_encode($response);
         $this->response = $this->response->withStringBody($content);
         $this->response = $this->response->withType('json');
