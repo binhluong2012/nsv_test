@@ -7,7 +7,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="exampleInputEmail1">From</label>
-                            <input type="number" class="form-control required" id="from" name="from" value="0" placeholder="Over or equal >=">
+                            <input type="number" class="form-control required" id="from" name="from" min="0" value="0" placeholder="Over or equal >=">
                         </div>
                         <div class="form-group">
                             <button type="button" onclick="searchForm()" class="btn btn-primary btn-block">SUBMIT</button>
@@ -16,7 +16,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="exampleInputEmail1">To</label>
-                            <input type="number" class="form-control comparison" id="to" name="to" placeholder="Under <">
+                            <input type="number" class="form-control comparison" min="0" id="to" name="to" placeholder="Under <">
                         </div>
                         <div class="form-group">
                             <button type="reset" class="btn btn-secondary btn-block">CLEAR</button>

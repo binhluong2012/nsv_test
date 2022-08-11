@@ -36,6 +36,7 @@
             table td {
                 border: 1px solid black;
                 padding: 10px;
+                 text-align: left;
             }
 
             table {
